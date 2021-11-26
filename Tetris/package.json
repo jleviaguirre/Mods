@@ -1,0 +1,16 @@
+{
+    "name": "Tetris",
+    "version": "1.0.0",
+    "description": "My first mod (no data interaction, jut play tetris on Spotifre)",
+    "scripts": {
+        "start": "npm install && npm run server",
+        "server": "mods-dev-server src"
+    },
+    "keywords": [],
+    "author": "jleviaguirre",
+    "license": "ISC",
+    "devDependencies": {
+        "@tibco/spotfire-mods-dev-server": "^1.0.0"
+    },
+    "dependencies": {}
+}

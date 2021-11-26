@@ -1,0 +1,217 @@
+<html>
+​
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>Satellites in 3D view | Sample | ArcGIS API for JavaScript 4.21</title>
+    ​
+    <style>
+        html,
+        body,
+        #viewDiv {
+            padding: 0;
+            margin: 0;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+    ​
+    <link rel="stylesheet" href="https://js.arcgis.com/4.21/esri/themes/light/main.css" />
+    <script src="https://js.arcgis.com/4.21/"></script>
+    <script src="https://developers.arcgis.com/javascript/latest/sample-code/satellites-3d/live/satellite.js"></script>
+    <script
+        id="spotfire-loader">var Spotfire = function (e) { "use strict"; return e.initialize = function (e) { var t = "sfTemp" + 1e4 * Math.random() + "Cb", r = window; r[t] = e; var a = { subject: "GetUrl", callbackId: -1, options: { cbId: t } }; r.addEventListener("message", (function e(t) { if (t.source !== r.parent || !t.data.src) return; r.removeEventListener("message", e); var a = document, n = a.createElement("script"); n.src = t.data.src, (a.head || a.body).appendChild(n) })), r.parent.postMessage(a, "*") }, e }({});</script>
+    ​
+    <script>
+        require([
+            "esri/Map",
+            "esri/views/SceneView",
+            "esri/layers/GraphicsLayer",
+            "esri/layers/FeatureLayer",
+            "esri/Graphic",
+            "esri/geometry/Point",
+            "esri/geometry/Multipoint",
+            "esri/geometry/Polyline"
+            //,
+            //"esri/geometry/SpatialReference",
+            //"dojo/text!https://developers.arcgis.com/javascript/latest/sample-code/satellites-3d/live/brightest.txt"
+        ], (Map, SceneView, GraphicsLayer, FeatureLayer, Graphic, Point, Multipoint, Polyline) => {
+            console.log("before onInit");
+            async function onInit(mod) {
+                console.log("in onInit");
+                var reader = mod.createReader(mod.visualization.data());
+                reader.subscribe(render);
+            }
+            const satelliteLayer = new GraphicsLayer();
+            const map = new Map({
+                basemap: "dark-gray-vector"
+            });
+            Spotfire.initialize(onInit);
+            // let currentDataView;
+
+            // setInterval(refresh, 100000000);
+            // async function render(dataView) {
+            //     //satelliteTracks.removeAll();
+            //     currentDataView = dataView;
+            //     refresh();
+            // }
+
+            // async function refresh() {
+            //     if (!currentDataView) {
+            //         return;
+            //     }
+
+            //     satelliteLayer.removeAll();
+            async function render(dataView) {
+                console.log("in render");
+                //satelliteLayer.removeAll();
+                let rows = await dataView.allRows();
+
+
+                let allGraphics = [];
+
+                //let points = [];
+
+                const markerSymbol = {
+                    type: "simple-marker", // autocasts as new SimpleMarkerSymbol()
+                    color: [226, 119, 40],
+                    size: "2px",
+                    outline: {
+                        // autocasts as new SimpleLineSymbol()
+                        color: [255, 255, 255],
+                        width: 2
+                    }
+                };
+
+                rows.map(row => {
+                    //let point = { latitude: row.continuous("Lat").value(), longitude: row.continuous("Long").value(), type: "point" };
+                    let g = {
+                        geometry: {
+                            type: "polyline",
+                            latitude: row.continuous("Lat").value(),
+                            longitude: row.continuous("Long").value(),
+                            z: row.continuous("Alt").value()
+                        },
+                        attributes: {
+                            url: "none",
+                            name: row.categorical("Name").formattedValue()
+                        }
+                    };
+                    //console.log(g);
+
+                    allGraphics.push(g);
+                    //multiPoint.addPoint([row.continuous("Lat").value(), row.continuous("Long").value()]); //({ latitude: row.continuous("Lat").value(), longitude: row.continuous("Long").value(), type:"point"}); // commonName: row.categorical("Name").formattedValue(), });
+
+                });
+                console.log(allGraphics);
+
+                let line = new Polyline({
+                    hasZ: false,
+                    hasM: true,
+                    paths: allGraphics,
+                    spatialReference: { wkid: 4326 }
+                });
+                let trackGraphic = new Graphic({
+                    geometry: {
+                        type: "polyline",
+                        paths: allGraphics
+                    },
+                    symbol: {
+                        type: "line-3d", // autocasts as new LineSymbol3D()
+                        symbolLayers: [
+                            {
+                                type: "line", // autocasts as new LineSymbol3DLayer()
+                                material: {
+                                    color: [192, 192, 192, 0.5]
+                                },
+                                size: 3
+                            }
+                        ]
+                    }
+                });
+
+                const polyLayer = new GraphicsLayer();
+                polyLayer.add(trackGraphic);
+
+
+                const layer = new FeatureLayer({
+                    source: allGraphics,  // array of graphics objects
+                    objectIdField: "name",
+                    fields: [{
+                        name: "name",
+                        type: "oid"
+                    }],
+                    renderer: {  // overrides the layer's default renderer
+                        type: "simple",
+                        symbol: markerSymbol
+                    }
+                });
+                console.log(layer);
+
+                map.add(polyLayer);
+            }
+
+            const view = new SceneView({
+                container: "viewDiv",
+                map: map,
+                constraints: {
+                    altitude: {
+                        max: 12000000000 // meters
+                    }
+                }
+            });
+
+            const graphicsLayer = new GraphicsLayer();
+
+            //map.add(graphicsLayer);
+
+            /*************************
+             * Add a 3D point graphic
+             *************************/
+
+            // London
+            // const point = {
+            //     type: "point", // autocasts as new Point()
+            //     latitude: 1.1,
+            //     longitude: 1.1,
+            //     z: 100
+            // };
+
+            // const markerSymbol = {
+            //     type: "simple-marker", // autocasts as new SimpleMarkerSymbol()
+            //     color: [226, 119, 40],
+            //     outline: {
+            //         // autocasts as new SimpleLineSymbol()
+            //         color: [255, 255, 255],
+            //         width: 2
+            //     }
+            // };
+
+            // const pointGraphic = new Graphic({
+            //     geometry: point,
+            //     symbol: markerSymbol
+            // });
+
+            // graphicsLayer.add(pointGraphic);
+
+
+
+            // const satelliteTracks = new GraphicsLayer();
+
+            //map.addMany([graphicsLayer, satelliteLayer]);
+
+
+        });
+
+
+    </script>
+</head>
+​
+
+<body>
+    <div id="viewDiv"></div>
+</body>
+​
+
+</html>
