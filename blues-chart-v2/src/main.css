@@ -1,0 +1,27 @@
+/*
+* Copyright © 2020. TIBCO Software Inc.
+* This file is subject to the license terms contained
+* in the license file that is distributed with this file.
+*/
+
+body{
+    margin: 0;
+    overflow: hidden;
+}
+
+#mod-container {
+    white-space: pre;
+}
+
+.col {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+}
+.row {
+  border:1px solid black;
+    background: whitesmoke;
+    display: flex;
+}
+
