@@ -1,0 +1,45 @@
+{
+    "apiVersion": "1.2",
+    "version": "1.0",
+    "name": "Blues Chart",
+    "id": "js-barcode-chart",
+    "icon": "icon.svg",
+    "properties": [
+        {
+            "name": "myProperty",
+            "type": "string",
+            "defaultValue": "myValue"
+        }
+    ],
+    "dataViewDefinition": {
+        "colorAxis": {
+            "mode": "dual",
+            "preferredDualMode": "continuous",
+            "dropTarget": {
+                "icon": "Color",
+                "description": "Color by {0}"
+            }
+        },
+        "axes": [
+            {
+                "name": "X",
+                "mode": "categorical",
+                "placement": "top",
+                "dropTarget": {
+                    "icon": "XAxis3D",
+                    "description": "Use {0} on the mod's X-axis"
+                }
+            },
+            {
+                "name": "Y",
+                "mode": "continuous",
+                "placement": "bottom"
+            }
+        ]
+    },
+    "files": [
+        "index.html",
+        "main.css",
+        "main.js"
+    ]
+}

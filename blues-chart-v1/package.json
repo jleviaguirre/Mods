@@ -1,0 +1,16 @@
+{
+    "name": "blues_chart",
+    "version": "1.0.0",
+    "description": "",
+    "scripts": {
+        "start": "npm install && npm run server",
+        "server": "mods-dev-server src"
+    },
+    "keywords": [],
+    "author": "Jose Leviaguirre",
+    "license": "ISC",
+    "devDependencies": {
+        "@tibco/spotfire-mods-dev-server": "^1.0.0"
+    },
+    "dependencies": {}
+}
