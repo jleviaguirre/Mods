@@ -1,0 +1,24 @@
+{
+    "name": "mod-markimekko",
+    "version": "1.0.0",
+    "description": "",
+    "scripts": {
+        "server": "mods-dev-server dist",
+        "build": "webpack --mode production",
+        "build-watch": "webpack --watch",
+        "start": "npm run build-watch"
+    },
+    "keywords": [],
+    "author": "Jose Leviaguirre",
+    "license": "ISC",
+    "devDependencies": {
+        "@tibco/spotfire-mods-dev-server": "^1.0.1",
+        "webpack": "^5.73.0",
+        "webpack-cli": "^4.10.0"
+    },
+    "dependencies": {
+        "copy-webpack-plugin": "^11.0.0",
+        "d3": "^3.5.17",
+        "save-dev": "^0.0.1-security"
+    }
+}

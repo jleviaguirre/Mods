@@ -1,0 +1,52 @@
+{
+    "apiVersion": "1.3",
+    "version": "1.0",
+    "name": "Marimekko Chart",
+    "id": "tibco-mods-marimekko",
+    "icon": "icon.svg",
+    "properties": [
+        {"name": "myProperty","type": "string","defaultValue": "myValue"},
+        {"name": "showBorders","type": "boolean","defaultValue": true},
+        {"name": "showLabels","type": "boolean","defaultValue": true}
+    ],
+    "dataViewDefinition": {
+        "colorAxis": {
+            "mode": "dual",
+            "dropTarget": {
+                "icon": "Color",
+                "description": "Color by {0}"
+            }
+        },
+        "axes": [
+            {
+                "name": "Category",
+                "mode": "categorical",
+                "placement": "top",
+                "dropTarget": {
+                    "icon": "XAxis3D",
+                    "description": "Use {0} on the mod's X-axis"
+                }
+            },
+            {
+                "name": "Segment",
+                "mode": "categorical",
+                "placement": "right",
+                "dropTarget": {
+                    "icon": "XAxis3D",
+                    "description": "Use {0} on the mod's X-axis"
+                }
+            },
+            {
+                "name": "Value",
+                "mode": "continuous",
+                "allowNonAggregatingMeasures": true,
+                "placement": "none"
+            }
+        ]
+    },
+    "files": [
+        "index.html",
+        "main.css",
+        "bundle.js"
+    ]
+}
